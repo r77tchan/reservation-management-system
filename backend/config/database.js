@@ -6,11 +6,6 @@ const dotenv = require('dotenv')
 // .envファイルの内容を読み込み、環境変数 (process.env) に設定
 dotenv.config({ path: __dirname + '/../.env' })
 
-console.log('DB_HOST:', process.env.DB_HOST)
-console.log('DB_USER:', process.env.DB_USER)
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD)
-console.log('DB_NAME:', process.env.DB_NAME)
-
 // 接続準備
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
