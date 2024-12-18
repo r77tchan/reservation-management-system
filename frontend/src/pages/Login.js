@@ -27,8 +27,6 @@ function Login() {
         },
         body: JSON.stringify(formData), // フォームデータをJSON形式で送信
       })
-      // デバッグ
-      console.log(JSON.stringify(formData))
 
       if (response.ok) {
         // サーバーからの成功応答を処理
