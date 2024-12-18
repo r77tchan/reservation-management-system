@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const SECRET_KEY = 'test' // 環境変数で管理するのが望ましい
+const SECRET_KEY = process.env.SECRET_KEY
 
 // JWTトークンを生成する関数
 const generateToken = (payload, expiresIn = '1h') => {
