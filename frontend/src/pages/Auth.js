@@ -14,12 +14,14 @@ function Auth() {
     }
   }, [navigate])
 
+  // フォームデータ管理
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   })
 
+  // 入力フォーム変更
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prevFormData) => ({
@@ -28,13 +30,12 @@ function Auth() {
     }))
   }
 
+  // フォーム送信
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     const endpoint = isLoginMode
       ? 'http://localhost:3001/auth/login' // ログインエンドポイント
       : 'http://localhost:3001/auth/register' // 新規登録エンドポイント
-
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -43,13 +44,10 @@ function Auth() {
         },
         body: JSON.stringify(formData),
       })
-
       if (response.ok) {
         const data = await response.json()
-
         localStorage.setItem('token', data.token) // トークンを保存
         localStorage.setItem('username', data.username) // ユーザー名を保存
-
         navigate('/') // トップページにリダイレクト
       } else {
         const errorData = await response.json()
@@ -64,6 +62,39 @@ function Auth() {
     }
   }
 
+  // パスワードリセットメール
+  const handleResetMail = async () => {
+    // 入力されているメールアドレスを取得
+    const email = formData.email
+    if (!email) {
+      alert('メールアドレスを入力してください。')
+      return
+    }
+    try {
+      const response = await fetch(
+        'http://localhost:3001/auth/reset-password',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }), // メールアドレスを送信
+        }
+      )
+      if (response.ok) {
+        alert('パスワードリセットメールを送信しました。')
+      } else {
+        const errorData = await response.json()
+        console.error('エラー:', errorData)
+        alert('リセットメールの送信に失敗しました。')
+      }
+    } catch (error) {
+      console.error('ネットワークエラー:', error)
+      alert('エラーが発生しました。')
+    }
+  }
+
+  // body
   return (
     <div>
       <form>
@@ -135,6 +166,14 @@ function Auth() {
               </>
             )}
           </div>
+          {isLoginMode && (
+            <div className="form-row">
+              パスワードリセットメールを
+              <span className="form-link" onClick={handleResetMail}>
+                送信
+              </span>
+            </div>
+          )}
         </div>
       </form>
     </div>

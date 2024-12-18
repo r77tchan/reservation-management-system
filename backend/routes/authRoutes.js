@@ -9,5 +9,7 @@ router.get('/', authController.home)
 router.post('/register', authController.register)
 // ユーザーログイン
 router.post('/login', authController.login)
+// パスワードリセットメール送信
+router.post('/reset-password', authController.reset)
 
 module.exports = router

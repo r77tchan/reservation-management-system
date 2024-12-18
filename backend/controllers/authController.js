@@ -1,5 +1,7 @@
 const { hashPassword, comparePassword } = require('../utils/bcryptHelper')
 const { generateToken } = require('../utils/jwtHelper')
+const { sendEmail } = require('../utils/emailHelper')
+
 const User = require('../models/User')
 
 // テスト用
@@ -68,5 +70,36 @@ exports.login = async (req, res) => {
     })
   } catch (err) {
     res.status(500).json({ error: err.message })
+  }
+}
+
+// パスワードリセットメール送信
+exports.reset = async (req, res) => {
+  try {
+    const { email } = req.body
+
+    // データベースから該当するユーザーを検索
+    User.login(email, async (err, user) => {
+      if (err) return res.status(500).json({ error: 'Database error' })
+      if (!user) return res.status(404).json({ error: 'User not found' })
+
+      // パスワードリセット用の一時トークンを生成
+      const resetToken = generateToken({ email }, '1h') // 有効時間
+
+      // リセットリンクを作成
+      const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`
+
+      // メール送信
+      await sendEmail(
+        email,
+        'パスワードリセット',
+        `パスワードリセットリンク: ${resetLink}`
+      )
+
+      res.status(200).json({ message: 'リセットメールを送信しました。' })
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'メール送信中にエラーが発生しました。' })
   }
 }
