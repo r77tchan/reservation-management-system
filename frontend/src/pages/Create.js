@@ -1,6 +1,6 @@
 import '../my.css'
 
-function Register() {
+function Create() {
   return (
     <div>
       <h1>予約を作成する</h1>
@@ -8,4 +8,4 @@ function Register() {
   )
 }
 
-export default Register
+export default Create

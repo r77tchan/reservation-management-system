@@ -1,10 +1,19 @@
 import './App.css'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
+import PrivateRoute from './components/PrivateRoute'
 import Default from './pages/Default'
 import Top from './pages/Top'
 import View from './pages/View'
-import Register from './pages/Register'
-import Login from './pages/Login'
+import Create from './pages/Create'
+import Auth from './pages/Auth'
+
+const routeConfig = [
+  { path: '/default', element: <Default /> },
+  { path: '/', element: <Top />, isPrivate: true },
+  { path: '/view', element: <View /> },
+  { path: '/create', element: <Create /> },
+  { path: '/auth', element: <Auth /> },
+]
 
 function App() {
   return (
@@ -13,26 +22,32 @@ function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/">Top</Link>
+              <Link to="/">/</Link>
             </li>
             <li>
-              <Link to="/view">View</Link>
+              <Link to="/view">/view</Link>
             </li>
             <li>
-              <Link to="/Register">register</Link>
+              <Link to="/create">/create</Link>
             </li>
             <li>
-              <Link to="/Login">login</Link>
+              <Link to="/auth">/auth</Link>
             </li>
           </ul>
         </nav>
       </header>
       <Routes>
-        <Route path="/default" element={<Default />} />
-        <Route path="/" element={<Top />} />
-        <Route path="/view" element={<View />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        {routeConfig.map(({ path, element, isPrivate }) =>
+          isPrivate ? (
+            <Route
+              key={path}
+              path={path}
+              element={<PrivateRoute>{element}</PrivateRoute>}
+            />
+          ) : (
+            <Route key={path} path={path} element={element} />
+          )
+        )}
       </Routes>
     </Router>
   )

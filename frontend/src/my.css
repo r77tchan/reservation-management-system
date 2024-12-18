@@ -39,3 +39,9 @@ form button {
   color: #FFFFFF;
   cursor: pointer;
 }
+
+.form-link {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
