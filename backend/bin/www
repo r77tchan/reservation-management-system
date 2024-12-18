@@ -4,8 +4,6 @@
  * Module dependencies.
  */
 
-const database = require('../config/database')
-
 const app = require('../app')
 const debug = require('debug')('backend:server')
 const http = require('http')
