@@ -2,10 +2,11 @@
 const database = require('../config/database')
 
 const User = {
-  // create: (data, callback) => {
-  //   const query = `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`
-  //   db.query(query, [data.name, data.email, data.password], callback)
-  // },
+  // ユーザー登録
+  register: (data, callback) => {
+    const query = `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`
+    database.query(query, [data.username, data.email, data.password], callback)
+  },
 }
 
 module.exports = User
