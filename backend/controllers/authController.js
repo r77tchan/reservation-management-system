@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt')
-
+const { hashPassword } = require('../utils/bcryptHelper')
+const { generateToken } = require('../utils/jwtHelper')
 const User = require('../models/User')
 
 // テスト用
@@ -8,18 +8,27 @@ exports.home = (req, res) => {
 }
 
 // ユーザー登録
-exports.register = (req, res) => {
-  const { username, email, password } = req.body
+exports.register = async (req, res) => {
+  try {
+    // 送信されたデータを取得
+    const { username, email, password } = req.body
 
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) return res.status(500).json({ error: err })
+    // パスワードをハッシュ化
+    const hashedPassword = await hashPassword(password)
 
+    // DB処理実行
     User.register(
       { username, email, password: hashedPassword },
       (err, result) => {
         if (err) return res.status(500).json({ error: err })
-        res.status(201).json({ message: 'ユーザー登録完了' })
+
+        // JWTを生成
+        const token = generateToken({ username, email })
+
+        res.status(201).json({ message: 'ユーザー登録完了', token })
       }
     )
-  })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
 }

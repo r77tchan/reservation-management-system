@@ -1,6 +1,7 @@
 // データベース接続
 const database = require('../config/database')
 
+// DB処理
 const User = {
   // ユーザー登録
   register: (data, callback) => {
