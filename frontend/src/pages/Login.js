@@ -27,6 +27,8 @@ function Login() {
         },
         body: JSON.stringify(formData), // フォームデータをJSON形式で送信
       })
+      // デバッグ
+      console.log(JSON.stringify(formData))
 
       if (response.ok) {
         // サーバーからの成功応答を処理
@@ -53,21 +55,21 @@ function Login() {
             <label>
               氏名
               <br />
-              <input type="text" onChange={handleChange} />
+              <input type="text" name="username" onChange={handleChange} />
             </label>
           </div>
           <div className="form-row">
             <label>
               メールアドレス
               <br />
-              <input type="email" onChange={handleChange} />
+              <input type="email" name="email" onChange={handleChange} />
             </label>
           </div>
           <div className="form-row">
             <label>
               パスワード
               <br />
-              <input type="password" onChange={handleChange} />
+              <input type="password" name="password" onChange={handleChange} />
             </label>
           </div>
           <div className="form-row">
