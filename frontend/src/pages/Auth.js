@@ -48,6 +48,8 @@ function Auth() {
         const data = await response.json()
 
         localStorage.setItem('token', data.token) // トークンを保存
+        localStorage.setItem('username', data.username) // ユーザー名を保存
+
         navigate('/') // トップページにリダイレクト
       } else {
         const errorData = await response.json()

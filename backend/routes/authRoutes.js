@@ -8,6 +8,6 @@ router.get('/', authController.home)
 // ユーザー登録
 router.post('/register', authController.register)
 // ユーザーログイン
-router.post('/login', authController.register)
+router.post('/login', authController.login)
 
 module.exports = router
