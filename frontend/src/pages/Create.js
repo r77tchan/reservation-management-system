@@ -25,6 +25,7 @@ function Create() {
         date: formatDate2(initialData.date),
         time: initialData.time,
         status: String(initialData.status),
+        id: initialData.id,
       })
     }
   }, [initialData])
