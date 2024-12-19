@@ -71,6 +71,7 @@ function Auth() {
     }
   }
 
+  // リセットメール送信
   const handleResetMail = async () => {
     const emailError = validateFields({ email: formData.email }).email
     if (emailError) {
@@ -101,7 +102,7 @@ function Auth() {
   }
 
   return (
-    <div>
+    <div style={{ marginTop: 100 }}>
       <form>
         <h1 className="form-title">{isLoginMode ? 'ログイン' : '新規登録'}</h1>
         <div className="form-wrapper">

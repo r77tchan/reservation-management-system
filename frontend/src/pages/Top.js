@@ -12,21 +12,15 @@ function Top() {
     setUsername(storedUsername)
   }, [navigate])
 
-  const handleLogout = () => {
-    // ローカルストレージから削除 = ログアウト
-    localStorage.removeItem('token')
-    localStorage.removeItem('username')
-
-    // ログインページにリダイレクト
-    navigate('/auth')
+  const handleClick = () => {
+    navigate('/view')
   }
 
   return (
     <div className="top-container">
       <h1>ようこそ、{username}、予約管理システムへ</h1>
-      <button className="logout-button" onClick={handleLogout}>
-        ログアウト
-      </button>
+      <p>ここで簡単に予約を管理できます。</p>
+      <button onClick={handleClick}>予約一覧を見る</button>
     </div>
   )
 }

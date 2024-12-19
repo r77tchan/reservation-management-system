@@ -7,6 +7,10 @@ body {
   background-color: #F5F4F9;
 }
 
+.form-title {
+  text-align: center;
+}
+
 form  {
   margin: 0 auto;
   width: 50%;
@@ -14,9 +18,7 @@ form  {
   border: 2px solid #ECECEE;
   border-radius: 10px;
 }
-.form-title {
-  text-align: center;
-}
+
 .form-wrapper {
   padding: 0 20px 20px 20px;
 }
@@ -48,4 +50,20 @@ form button {
 
 .error {
   color: red;
+}
+
+.top-container {
+  text-align: center;
+}
+.top-container button {
+  background-color: #047CFE;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-container {
+  text-align: center;
 }
