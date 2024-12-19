@@ -24,10 +24,11 @@ exports.register = async (req, res) => {
     const hashedPassword = await hashPassword(password)
 
     // ユーザー登録
-    await User.insertUser({ username, email, password: hashedPassword })
+    const result = await User.insertUser({ username, email, password: hashedPassword })
+    const userId = result.insertId // id取得
 
     // JWTを生成
-    const token = generateToken({ username, email })
+    const token = generateToken({ userId, username, email })
 
     res.status(201).json({ message: 'ユーザー登録完了', token, username })
   } catch (err) {
@@ -54,7 +55,7 @@ exports.login = async (req, res) => {
     }
 
     // JWTを生成
-    const token = generateToken({ username: user.username, email: user.email })
+    const token = generateToken({ userId: user.id, username: user.username, email: user.email })
 
     res.status(200).json({ message: 'ログイン成功', token, username: user.username })
   } catch (err) {
