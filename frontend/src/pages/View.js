@@ -38,6 +38,32 @@ function View() {
     fetchReservations()
   }, []) // 初回レンダー時のみ実行
 
+  // 削除ボタン
+  const handleDelete = async (id) => {
+    if (!window.confirm('削除?')) return // 確認ダイアログ
+    try {
+      const token = localStorage.getItem('token') // トークン取得
+      const response = await fetch(`http://localhost:3001/reservations/${id}/delete`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`, // トークンをヘッダーに添付
+        },
+      })
+      if (response.ok) {
+        // 削除成功時、`reservations` 状態を更新
+        setReservations((prevReservations) => prevReservations.filter((reservation) => reservation.id !== id))
+        // alert('削除に成功')
+      } else {
+        const errorData = await response.json()
+        console.log(errorData)
+        alert('削除に失敗')
+      }
+    } catch (err) {
+      console.log(err)
+      alert('ネットワークエラーが発生')
+    }
+  }
+
   return (
     <div className="view-container">
       <h1>予約一覧</h1>
@@ -59,7 +85,7 @@ function View() {
               <td>{getStatusLabel(reservation.status)}</td>
               <td>
                 <button onClick={() => navigate('/create', { state: reservation })}>編集</button>
-                <button onClick={() => console.log('削除', reservation.id)}>削除</button>
+                <button onClick={() => handleDelete(reservation.id)}>削除</button>
               </td>
             </tr>
           ))}

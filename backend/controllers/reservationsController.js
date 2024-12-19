@@ -60,4 +60,15 @@ exports.update = async (req, res) => {
 }
 
 // 予約削除
-exports.delete = async (req, res) => {}
+exports.delete = async (req, res) => {
+  try {
+    const reservationId = req.params.id
+
+    // DBで削除処理
+    await Reservation.deleteReservation(reservationId)
+
+    res.status(200).json({ message: '削除成功' })
+  } catch (err) {
+    res.status(500).json({ error: '削除処理中にエラーが発生しました' })
+  }
+}
