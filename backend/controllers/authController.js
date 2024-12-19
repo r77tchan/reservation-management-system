@@ -12,64 +12,54 @@ exports.home = (req, res) => {
 // ユーザー登録
 exports.register = async (req, res) => {
   try {
-    // 送信されたデータを取得
     const { username, email, password } = req.body
+
+    // メールアドレスが既に登録されているか確認
+    const user = await User.findUserByEmail(email)
+    if (user) {
+      return res.status(409).json({ error: 'このメールアドレスは既に登録されています' })
+    }
 
     // パスワードをハッシュ化
     const hashedPassword = await hashPassword(password)
 
-    // DB処理実行
-    User.register(
-      { username, email, password: hashedPassword },
-      (err, result) => {
-        if (err) return res.status(500).json({ error: err })
+    // ユーザー登録
+    await User.insertUser({ username, email, password: hashedPassword })
 
-        // JWTを生成
-        const token = generateToken({ username, email })
+    // JWTを生成
+    const token = generateToken({ username, email })
 
-        res.status(201).json({ message: 'ユーザー登録完了', token, username })
-      }
-    )
+    res.status(201).json({ message: 'ユーザー登録完了', token, username })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    console.error(err)
+    res.status(500).json({ error: 'サーバーエラーが発生しました' })
   }
 }
 
 // ユーザーログイン
 exports.login = async (req, res) => {
   try {
-    // 送信されたデータを取得
     const { email, password } = req.body
 
-    // データベースからメールアドレスを元にユーザー情報を検索する
-    User.login(email, async (err, user) => {
-      // データベース操作中にエラーが発生した場合のエラーハンドリング
-      if (err) return res.status(500).json({ error: 'Database error' })
+    // メールアドレスでユーザーを検索
+    const user = await User.findUserByEmail(email)
+    if (!user) {
+      return res.status(404).json({ error: '登録されていないメールアドレス' })
+    }
 
-      // 該当するユーザーが見つからない場合
-      if (!user) return res.status(404).json({ error: 'User not found' })
+    // パスワードの比較
+    const isMatch = await comparePassword(password, user.password)
+    if (!isMatch) {
+      return res.status(401).json({ error: 'パスワードが一致しません' })
+    }
 
-      // パスワードの比較
-      const isMatch = await comparePassword(password, user.password)
+    // JWTを生成
+    const token = generateToken({ username: user.username, email: user.email })
 
-      if (!isMatch) {
-        // パスワードが一致しない場合
-        return res.status(401).json({ error: 'Incorrect password' })
-      }
-
-      // JWTを生成
-      const token = generateToken({
-        username: user.username,
-        email: user.email,
-      })
-
-      // パスワードが一致する場合のレスポンス
-      res
-        .status(200)
-        .json({ message: 'ログイン成功', token, username: user.username })
-    })
+    res.status(200).json({ message: 'ログイン成功', token, username: user.username })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    console.error(err)
+    res.status(500).json({ error: 'サーバーエラーが発生しました' })
   }
 }
 
@@ -78,26 +68,22 @@ exports.reset = async (req, res) => {
   try {
     const { email } = req.body
 
-    // データベースから該当するユーザーを検索
-    User.login(email, async (err, user) => {
-      if (err) return res.status(500).json({ error: 'Database error' })
-      if (!user) return res.status(404).json({ error: 'User not found' })
+    // メールアドレスでユーザーを検索
+    const user = await User.findUserByEmail(email)
+    if (!user) {
+      return res.status(404).json({ error: '登録されていないメールアドレス' })
+    }
 
-      // パスワードリセット用の一時トークンを生成
-      const resetToken = generateToken({ email }, '1h') // 有効時間
+    // パスワードリセット用トークン生成
+    const resetToken = generateToken({ email }, '1h') // 有効時間: 1時間
 
-      // リセットリンクを作成
-      const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`
+    // リセットリンク作成
+    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`
 
-      // メール送信
-      await sendEmail(
-        email,
-        'パスワードリセット',
-        `パスワードリセットリンク: ${resetLink}`
-      )
+    // メール送信
+    await sendEmail(email, 'パスワードリセット', `パスワードリセットリンク: ${resetLink}`)
 
-      res.status(200).json({ message: 'リセットメールを送信しました。' })
-    })
+    res.status(200).json({ message: 'リセットメールを送信しました。' })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'メール送信中にエラーが発生しました。' })
