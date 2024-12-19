@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getStatusLabel, formatTime, formatDate } from '../utils/format'
 import '../my.css'
 
 function View() {
@@ -53,9 +54,9 @@ function View() {
         <tbody>
           {reservations.map((reservation) => (
             <tr key={reservation.id}>
-              <td>{reservation.date}</td>
-              <td>{reservation.time}</td>
-              <td>{reservation.status}</td>
+              <td>{formatDate(reservation.date)}</td>
+              <td>{formatTime(reservation.time)}</td>
+              <td>{getStatusLabel(reservation.status)}</td>
               <td>
                 <button onClick={() => console.log('編集', reservation.id)}>編集</button>
                 <button onClick={() => console.log('削除', reservation.id)}>削除</button>

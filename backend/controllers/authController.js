@@ -79,10 +79,10 @@ exports.reset = async (req, res) => {
     const resetToken = generateToken({ email }, '1h') // 有効時間: 1時間
 
     // リセットリンク作成
-    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`
+    const resetLink = `http://localhost:3000/to-do-reset-link?token=${resetToken}`
 
     // メール送信
-    await sendEmail(email, 'パスワードリセット', `パスワードリセットリンク: ${resetLink}`)
+    await sendEmail(email, 'パスワードリセット', `パスワードリセットリンクは未実装: ${resetLink}`)
 
     res.status(200).json({ message: 'リセットメールを送信しました。' })
   } catch (err) {
