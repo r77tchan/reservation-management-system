@@ -15,7 +15,7 @@ const Reservation = {
   // 特定ユーザーの予約を全取得
   selectReservationsByUser: (userId) => {
     return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM reservations WHERE user_id = ?`
+      const query = `SELECT * FROM reservations WHERE user_id = ? ORDER BY date ASC, time ASC`
       database.query(query, [userId], (err, results) => {
         if (err) return reject(err)
         resolve(results)
