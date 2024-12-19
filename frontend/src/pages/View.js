@@ -58,7 +58,7 @@ function View() {
               <td>{formatTime(reservation.time)}</td>
               <td>{getStatusLabel(reservation.status)}</td>
               <td>
-                <button onClick={() => console.log('編集', reservation.id)}>編集</button>
+                <button onClick={() => navigate('/create', { state: reservation })}>編集</button>
                 <button onClick={() => console.log('削除', reservation.id)}>削除</button>
               </td>
             </tr>

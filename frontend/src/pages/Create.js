@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+
+import { formatDate2 } from '../utils/format'
 import '../my.css'
 
 function Create() {
   const navigate = useNavigate()
+  const { state: initialData } = useLocation()
 
   const [formData, setFormData] = useState({
     date: '',
@@ -11,6 +14,20 @@ function Create() {
     status: '0', // 初期値は"確認済み"
   })
   const [error, setError] = useState(null)
+
+  const [isEditMode, setIsEditMode] = useState(false)
+
+  // initialDataが存在する場合は編集モードの為、情報セット
+  useEffect(() => {
+    if (initialData) {
+      setIsEditMode(true)
+      setFormData({
+        date: formatDate2(initialData.date),
+        time: initialData.time,
+        status: String(initialData.status),
+      })
+    }
+  }, [initialData])
 
   // フォームの変更を管理
   const handleChange = (e) => {
@@ -28,8 +45,13 @@ function Create() {
     try {
       const token = localStorage.getItem('token') // トークンを取得
 
-      const response = await fetch('http://localhost:3001/reservations/create', {
-        method: 'POST',
+      const url = isEditMode
+        ? `http://localhost:3001/reservations/${initialData.id}`
+        : `http://localhost:3001/reservations/create`
+      const method = isEditMode ? 'PUT' : 'POST'
+
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // トークンを送信
@@ -41,7 +63,7 @@ function Create() {
         navigate('/view')
       } else {
         const errorData = await response.json()
-        setError(errorData.error || '予約作成に失敗しました。')
+        setError(errorData.error || '失敗しました。')
       }
     } catch (err) {
       setError('ネットワークエラーが発生しました。')
@@ -50,7 +72,7 @@ function Create() {
 
   return (
     <div className="create-container">
-      <h1>予約を作成する</h1>
+      <h1>{isEditMode ? '予約を編集する' : '予約を作成する'}</h1>
       {error && <p className="error">{error}</p>} {/* エラーメッセージ */}
       <form onSubmit={handleSubmit}>
         <div className="form-wrapper">
@@ -80,7 +102,7 @@ function Create() {
             </label>
           </div>
           <div className="form-row">
-            <button type="submit">予約を作成</button>
+            <button type="submit">{isEditMode ? '予約を編集' : '予約を作成'}</button>
           </div>
         </div>
       </form>

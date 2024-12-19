@@ -26,5 +26,12 @@ const formatDate = (dateString) => {
   const day = String(date.getDate()).padStart(2, '0')
   return `${year}/${month}/${day}` //
 }
+const formatDate2 = (dateString) => {
+  const date = new Date(dateString) // 日付文字列を Date オブジェクトに変換
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0') // 月は0から始まるため +1
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}` //
+}
 
-export { getStatusLabel, formatTime, formatDate }
+export { getStatusLabel, formatTime, formatDate, formatDate2 }
