@@ -27,7 +27,7 @@ form  {
   margin-bottom: 20px;
 }
 
-form input, form button {
+form input, form button, form select {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -65,5 +65,41 @@ form button {
 }
 
 .view-container {
+  text-align: center;
+}
+
+.view-table {
+  margin: 0 auto;
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 10px;
+  max-width: 1100px;
+}
+
+.view-table th {
+  background-color: #F8FAFB;
+}
+.view-table td {
+  background-color: #FFFFFF;
+}
+
+.view-table th,
+.view-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.view-container button {
+  background-color: #047CFE;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.create-container {
   text-align: center;
 }
