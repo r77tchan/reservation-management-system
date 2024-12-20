@@ -25,7 +25,9 @@ const ReservationList = ({ reservations, handleDelete }) => {
               <td>{getStatusLabel(reservation.status)}</td>
               <td>
                 <button onClick={() => navigate('/create', { state: reservation })}>編集</button>
-                <button onClick={() => handleDelete(reservation.id)}>削除</button>
+                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
+                  削除
+                </button>
               </td>
             </tr>
           ))}

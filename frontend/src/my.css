@@ -99,6 +99,9 @@ form button {
   cursor: pointer;
   margin: 5px;
 }
+.view-container .delete-button {
+  background-color: #EC7063;
+}
 
 .view-button-under {
   margin-top: 20px;
@@ -107,4 +110,8 @@ form button {
 
 .create-container {
   text-align: center;
+}
+
+.delete-button {
+  background-color: #EC7063;
 }

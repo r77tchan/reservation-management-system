@@ -80,11 +80,34 @@ function Create() {
     }
   }
 
+  // 削除送信、View.jsのとは同名の別関数
+  const handleDelete = async (e) => {
+    e.preventDefault()
+
+    try {
+      const token = localStorage.getItem('token')
+      const response = await fetch(`http://localhost:3001/reservations/${formData.id}/delete`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      if (response.ok) {
+        // 削除成功時遷移
+        navigate('/view')
+      } else {
+        const errorData = await response.json()
+        setError(errorData.error || '失敗しました。')
+      }
+    } catch (err) {
+      setError('ネットワークエラーが発生しました。')
+    }
+  }
+
   return (
     <div className="create-container">
       <h1>{isEditMode ? '予約を編集する' : '予約を作成する'}</h1>
       {error && <p className="error">{error}</p>} {/* エラーメッセージ */}
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="form-wrapper">
           <div className="form-row">
             <label>
@@ -112,8 +135,15 @@ function Create() {
             </label>
           </div>
           <div className="form-row">
-            <button type="submit">{isEditMode ? '予約を編集' : '予約を作成'}</button>
+            <button onClick={handleSubmit}>{isEditMode ? '予約を編集' : '予約を作成'}</button>
           </div>
+          {isEditMode && (
+            <div className="form-row">
+              <button onClick={handleDelete} className="delete-button">
+                削除
+              </button>
+            </div>
+          )}
         </div>
       </form>
     </div>
