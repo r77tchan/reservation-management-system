@@ -17,16 +17,25 @@ function Create() {
 
   const [isEditMode, setIsEditMode] = useState(false)
 
-  // initialDataが存在する場合は編集モードの為、情報セット
+  // initialDataが存在する場合
   useEffect(() => {
     if (initialData) {
-      setIsEditMode(true)
-      setFormData({
-        date: formatDate2(initialData.date),
-        time: initialData.time,
-        status: String(initialData.status),
-        id: initialData.id,
-      })
+      if (initialData.isOnlyDate) {
+        // Calendarから日付のみ指定の場合
+        setFormData((prevFormData) => ({
+          ...prevFormData, // 以前の状態を保持
+          date: formatDate2(initialData.date), // date を更新
+        }))
+      } else {
+        // ReservationListから編集の場合、編集モードへ
+        setIsEditMode(true)
+        setFormData({
+          date: formatDate2(initialData.date),
+          time: initialData.time,
+          status: String(initialData.status),
+          id: initialData.id,
+        })
+      }
     }
   }, [initialData])
 

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { getStatusLabel, formatTime, formatDate } from '../utils/format'
+import ReservationList from '../components//ReservationList'
+import Calendar from '../components//Calendar'
 import '../my.css'
 
-function View() {
+const View = () => {
+  const [reservations, setReservations] = useState([]) // 予約データの状態
+  const [isCalendarView, setIsCalendarView] = useState(
+    localStorage.getItem('isCalendarView') === 'true' // localStorage の値を論理型に変換(必ず論理値型が格納される)
+  )
   const navigate = useNavigate()
 
-  const [reservations, setReservations] = useState([]) // 予約データの状態
-
-  // ページ読み込み時にデータを取得
+  // 読み込み時、データ取得処理
   useEffect(() => {
     const fetchReservations = async () => {
       try {
@@ -17,7 +20,7 @@ function View() {
         const response = await fetch('http://localhost:3001/reservations', {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`, // トークンをヘッダーに添付
+            Authorization: `Bearer ${token}`,
           },
         })
 
@@ -25,75 +28,56 @@ function View() {
           const data = await response.json()
           setReservations(data.reservations) // 取得した予約データを保存
         } else {
-          const errorData = await response.json()
-          console.log(errorData)
-          alert('console確認')
+          console.error('データ取得失敗')
         }
       } catch (err) {
-        console.log(err)
-        alert('console確認')
+        console.error('ネットワークエラー', err)
       }
     }
 
     fetchReservations()
-  }, []) // 初回レンダー時のみ実行
+  }, [])
 
-  // 削除ボタン
+  // 削除処理
   const handleDelete = async (id) => {
-    if (!window.confirm('削除?')) return // 確認ダイアログ
+    if (!window.confirm('削除しますか？')) return
     try {
-      const token = localStorage.getItem('token') // トークン取得
+      const token = localStorage.getItem('token')
       const response = await fetch(`http://localhost:3001/reservations/${id}/delete`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`, // トークンをヘッダーに添付
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
+
       if (response.ok) {
-        // 削除成功時、`reservations` 状態を更新
-        setReservations((prevReservations) => prevReservations.filter((reservation) => reservation.id !== id))
-        // alert('削除に成功')
+        // 現在の状態を更新
+        setReservations((prev) => prev.filter((reservation) => reservation.id !== id))
       } else {
-        const errorData = await response.json()
-        console.log(errorData)
-        alert('削除に失敗')
+        console.error('削除失敗')
       }
     } catch (err) {
-      console.log(err)
-      alert('ネットワークエラーが発生')
+      console.error('ネットワークエラー', err)
     }
   }
 
   return (
     <div className="view-container">
       <h1>予約一覧</h1>
-
-      <table className="view-table">
-        <thead>
-          <tr>
-            <th>日付</th>
-            <th>時間</th>
-            <th>ステータス</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reservations.map((reservation) => (
-            <tr key={reservation.id}>
-              <td>{formatDate(reservation.date)}</td>
-              <td>{formatTime(reservation.time)}</td>
-              <td>{getStatusLabel(reservation.status)}</td>
-              <td>
-                <button onClick={() => navigate('/create', { state: reservation })}>編集</button>
-                <button onClick={() => handleDelete(reservation.id)}>削除</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p>
+      {!isCalendarView ? (
+        <ReservationList reservations={reservations} handleDelete={handleDelete} />
+      ) : (
+        <Calendar reservations={reservations} />
+      )}
+      <div className="view-button-under">
         <button onClick={() => navigate('/create')}>新規作成</button>
-      </p>
+        <button
+          onClick={() => {
+            localStorage.setItem('isCalendarView', String(!isCalendarView))
+            setIsCalendarView(!isCalendarView) // ここ非同期なので保存する順番大事
+          }}
+        >
+          {isCalendarView ? 'リスト表示' : 'カレンダー表示'}
+        </button>
+      </div>
     </div>
   )
 }
