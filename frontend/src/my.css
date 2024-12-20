@@ -75,6 +75,8 @@ form button {
   border-collapse: collapse;
   padding: 10px;
   max-width: 1100px;
+  border-radius: 8px; /* 角を丸くする */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ドロップシャドウ */
 }
 
 .view-table th {
@@ -114,4 +116,12 @@ form button {
 
 .delete-button {
   background-color: #EC7063;
+}
+
+button {
+  border-radius: 8px; /* 角を丸くする */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ドロップシャドウ */
+}
+button:hover {
+  opacity: 0.9;
 }
