@@ -13,14 +13,22 @@ ul {
 
 li {
   padding: 20px;
+  text-align: center;
 }
 
 a {
   color: white;
   text-decoration: none;
+  display: inline-block;
 }
 
 .logout {
   color: white;
   cursor: pointer;
+}
+
+a:hover,
+.logout:hover {
+  opacity: 0.9;
+  background-color: #222222;
 }

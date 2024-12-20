@@ -18,16 +18,14 @@ function Header() {
     <header>
       <nav>
         <ul>
-          <li>
-            <Link to="/">ホーム</Link>
-          </li>
-          <li>
-            <Link to="/view">予約一覧</Link>
-          </li>
-          <li>
-            <span className="logout" onClick={handleLogout}>
-              ログアウト
-            </span>
+          <Link to="/">
+            <li>ホーム</li>
+          </Link>
+          <Link to="/view">
+            <li>予約一覧</li>
+          </Link>
+          <li className="logout" onClick={handleLogout}>
+            ログアウト
           </li>
         </ul>
       </nav>
