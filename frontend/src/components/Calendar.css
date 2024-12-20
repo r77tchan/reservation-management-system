@@ -33,6 +33,12 @@ h1 {
 .fc-daygrid-day-number {
   color: black;
 }
+.fc-daygrid-day-number:hover {
+  background-color: transparent !important; /* ホバー時の背景色を透明に */
+}
+.fc-col-header-cell-cushion:hover {
+  background-color: transparent !important; /* ホバー時の背景色を透明に */
+}
 
 .fc-col-header-cell-cushion {
   color: black;
