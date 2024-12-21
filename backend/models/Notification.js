@@ -25,7 +25,7 @@ const Notification = {
   deleteNotificationById: (id) => {
     return new Promise((resolve, reject) => {
       const query = `DELETE FROM notifications WHERE id = ?`
-      database.query(query, [], (err, results) => {
+      database.query(query, [id], (err, results) => {
         if (err) return reject(err)
         resolve(results)
       })

@@ -103,6 +103,32 @@ function Create() {
     }
   }
 
+  // 通知リクエストを送信
+  const handleNotice = async (e) => {
+    e.preventDefault()
+    try {
+      const token = localStorage.getItem('token')
+
+      const response = await fetch('http://localhost:3001/notifications/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // トークンを送信
+        },
+        body: JSON.stringify(formData), // フォームデータを送信
+      })
+
+      if (response.ok) {
+        navigate('/view')
+      } else {
+        const errorData = await response.json()
+        setError(errorData.error || '失敗しました。')
+      }
+    } catch (err) {
+      setError('ネットワークエラーが発生しました。')
+    }
+  }
+
   return (
     <div className="create-container">
       <h1>{isEditMode ? '予約を編集する' : '予約を作成する'}</h1>
@@ -138,11 +164,18 @@ function Create() {
             <button onClick={handleSubmit}>{isEditMode ? '予約を編集' : '予約を作成'}</button>
           </div>
           {isEditMode && (
-            <div className="form-row">
-              <button onClick={handleDelete} className="delete-button">
-                削除
-              </button>
-            </div>
+            <>
+              <div className="form-row">
+                <button onClick={handleDelete} className="delete-button">
+                  削除
+                </button>
+              </div>
+              <div className="form-row">
+                <button onClick={handleNotice} className="notice-button">
+                  通知登録
+                </button>
+              </div>
+            </>
           )}
         </div>
       </form>

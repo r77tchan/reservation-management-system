@@ -30,7 +30,7 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/auth', authRoutesRouter)
 app.use('/reservations', reservationsRoutesRouter)
-app.use('notifications', notificationsRoutesRouter)
+app.use('/notifications', notificationsRoutesRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
