@@ -41,11 +41,11 @@ const Notification = {
       })
     })
   },
-  // 24時間以内に迫った通知を取得
+  // 24時間後以内に迫った通知を取得
   selectNotificationsWithin24Hours: () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT n.id, n.reservation_id, r.date, r.time
+        SELECT n.id, n.reservation_id, r.date, r.time, r.user_id
         FROM notifications n
         JOIN reservations r ON n.reservation_id = r.id
         WHERE TIMESTAMP(r.date, r.time) <= DATE_ADD(NOW(), INTERVAL 24 HOUR)
