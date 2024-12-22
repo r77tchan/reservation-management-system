@@ -31,6 +31,16 @@ const Notification = {
       })
     })
   },
+  // 指定のreservation_idのrowをselect(既に予約が通知登録されているか確認する為に使用)
+  selectNotificationByReservation_id: (reservation_id) => {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM notifications WHERE reservation_id = ?`
+      database.query(query, [reservation_id], (err, results) => {
+        if (err) return reject(err)
+        resolve(results)
+      })
+    })
+  },
 }
 
 module.exports = Notification
