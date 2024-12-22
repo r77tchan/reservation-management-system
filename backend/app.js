@@ -6,6 +6,9 @@ const logger = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 
+// 毎分実行スクリプト
+require('./utils/cron')
+
 // ルート設定
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
