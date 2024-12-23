@@ -1,8 +1,11 @@
+// View.jsから読み込まれる、リスト表示の予約一覧
+
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getStatusLabel, formatTime, formatDate } from '../utils/format'
 import '../my.css'
 
+// View.jsから予約一覧データと削除ボタン押下関数を受け取る
 const ReservationList = ({ reservations, handleDelete }) => {
   const navigate = useNavigate()
 
@@ -24,6 +27,7 @@ const ReservationList = ({ reservations, handleDelete }) => {
               <td>{formatTime(reservation.time)}</td>
               <td>{getStatusLabel(reservation.status)}</td>
               <td>
+                {/*予約データを渡して編集画面(Create.js)へ遷移*/}
                 <button onClick={() => navigate('/create', { state: reservation })}>編集</button>
                 <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
                   削除

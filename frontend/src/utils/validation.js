@@ -1,3 +1,5 @@
+// Auth.jsで使用しているバリデーションチェック
+
 export const validateFields = (fields) => {
   const errors = {}
 

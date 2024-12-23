@@ -1,3 +1,5 @@
+// 予約一覧画面。フラグを管理してカレンダービューとリストビューを切り替え可能
+
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -6,7 +8,7 @@ import Calendar from '../components//Calendar'
 import '../my.css'
 
 const View = () => {
-  const [reservations, setReservations] = useState([]) // 予約データの状態
+  const [reservations, setReservations] = useState([]) // 予約データの内部変数
   const [isCalendarView, setIsCalendarView] = useState(
     localStorage.getItem('isCalendarView') === 'true' // localStorage の値を論理型に変換(必ず論理値型が格納される)
   )
@@ -20,7 +22,7 @@ const View = () => {
         const response = await fetch('http://localhost:3001/reservations', {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // リクエストにトークンを含めてサーバー側で不正チェック
           },
         })
 
@@ -38,7 +40,7 @@ const View = () => {
     fetchReservations()
   }, [])
 
-  // 削除処理
+  // ReservationList.jsに渡す削除処理
   const handleDelete = async (id) => {
     if (!window.confirm('削除しますか？')) return
     try {

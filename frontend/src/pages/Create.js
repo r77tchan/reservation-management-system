@@ -1,3 +1,6 @@
+// 予約の編集、作成画面
+// View.js内のCalendar.js、ReservationList.jsから呼び出し
+
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -6,6 +9,7 @@ import '../my.css'
 
 function Create() {
   const navigate = useNavigate()
+  // Calendar.js、ReservationList.jsから受け取る予約データ(存在する→編集モードor日付指定作成モード、存在しない→作成モード)
   const { state: initialData } = useLocation()
 
   const [formData, setFormData] = useState({
@@ -80,7 +84,7 @@ function Create() {
     }
   }
 
-  // 削除送信、View.jsのとは同名の別関数
+  // 削除送信。View.jsのとは同名の別関数
   const handleDelete = async (e) => {
     e.preventDefault()
 

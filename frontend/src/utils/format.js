@@ -1,3 +1,6 @@
+// Create.jsで使用している時間、日付のフォーマット関数
+// サーバー側、特にデータベース保存の形式との変換
+
 // ステータスのマッピング
 const getStatusLabel = (status) => {
   switch (status) {
