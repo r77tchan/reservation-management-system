@@ -3,7 +3,7 @@ import { io } from 'socket.io-client'
 
 export const NotificationContext = createContext()
 
-const socket = io(process.env.API_BASE_URL) // サーバーのURL
+const socket = io(process.env.REACT_APP_API_BASE_URL) // サーバーのURL
 
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([])

@@ -60,8 +60,8 @@ function Create() {
       const token = localStorage.getItem('token') // トークンを取得
 
       const url = isEditMode
-        ? `http://localhost:3001/reservations/${initialData.id}`
-        : `http://localhost:3001/reservations/create`
+        ? `${process.env.REACT_APP_API_BASE_URL}/reservations/${initialData.id}`
+        : `${process.env.REACT_APP_API_BASE_URL}/reservations/create`
       const method = isEditMode ? 'PUT' : 'POST'
 
       const response = await fetch(url, {
@@ -90,7 +90,7 @@ function Create() {
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/reservations/${formData.id}/delete`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reservations/${formData.id}/delete`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -113,7 +113,7 @@ function Create() {
     try {
       const token = localStorage.getItem('token')
 
-      const response = await fetch('http://localhost:3001/notifications/send', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/notifications/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

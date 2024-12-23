@@ -8,7 +8,7 @@ const users = new Map() // userId => socketId のマッピング
 const initializeSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: 'http://localhost:3000', // ReactアプリのURL
+      origin: `${process.env.API_BASE_URL}`, // ReactアプリのURL
       methods: ['GET', 'POST'],
     },
   })

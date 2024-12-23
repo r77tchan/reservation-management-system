@@ -46,7 +46,9 @@ function Auth() {
     }
 
     // APIリクエストの処理
-    const endpoint = isLoginMode ? 'http://localhost:3001/auth/login' : 'http://localhost:3001/auth/register'
+    const endpoint = isLoginMode
+      ? `${process.env.REACT_APP_API_BASE_URL}/auth/login`
+      : `${process.env.REACT_APP_API_BASE_URL}/auth/register`
 
     try {
       const response = await fetch(endpoint, {
@@ -80,7 +82,7 @@ function Auth() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/auth/reset-password', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email }),

@@ -19,7 +19,7 @@ const View = () => {
     const fetchReservations = async () => {
       try {
         const token = localStorage.getItem('token')
-        const response = await fetch('http://localhost:3001/reservations', {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reservations`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`, // リクエストにトークンを含めてサーバー側で不正チェック
@@ -45,7 +45,7 @@ const View = () => {
     if (!window.confirm('削除しますか？')) return
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/reservations/${id}/delete`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reservations/${id}/delete`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })
