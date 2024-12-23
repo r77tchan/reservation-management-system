@@ -1,3 +1,5 @@
+// ユーザーログイン、登録画面
+
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { validateFields } from '../utils/validation'
@@ -21,22 +23,23 @@ function Auth() {
     }
   }, [navigate])
 
-  const handleChange = (e) => {
+  // いずれかフォーム変更時、内部変数を更新
+  const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
     setErrors((prev) => ({ ...prev, [name]: '' })) // 入力時にエラーをクリア
   }
 
+  // ログイン、登録ボタン押下
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     // バリデーション関数を呼び出し
     const validationErrors = validateFields(
-      isLoginMode
-        ? { email: formData.email, password: formData.password }
-        : formData
+      isLoginMode ? { email: formData.email, password: formData.password } : formData
     )
 
+    // バリデーションに引っ掛かっているなら終了
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
       return
@@ -44,8 +47,8 @@ function Auth() {
 
     // APIリクエストの処理
     const endpoint = isLoginMode
-      ? 'http://localhost:3001/auth/login'
-      : 'http://localhost:3001/auth/register'
+      ? `${process.env.REACT_APP_API_BASE_URL}/auth/login`
+      : `${process.env.REACT_APP_API_BASE_URL}/auth/register`
 
     try {
       const response = await fetch(endpoint, {
@@ -54,6 +57,7 @@ function Auth() {
         body: JSON.stringify(formData),
       })
       if (response.ok) {
+        // 成功時トークンをローカルストレージに保存して、画面遷移
         const data = await response.json()
         localStorage.setItem('token', data.token)
         localStorage.setItem('username', data.username)
@@ -61,9 +65,7 @@ function Auth() {
       } else {
         const errorData = await response.json()
         console.error('エラー:', errorData)
-        alert(
-          isLoginMode ? 'ログインに失敗しました。' : '新規登録に失敗しました。'
-        )
+        alert(isLoginMode ? 'ログインに失敗しました。' : '新規登録に失敗しました。')
       }
     } catch (error) {
       console.error('ネットワークエラー:', error)
@@ -80,14 +82,11 @@ function Auth() {
     }
 
     try {
-      const response = await fetch(
-        'http://localhost:3001/auth/reset-password',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: formData.email }),
-        }
-      )
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email }),
+      })
       if (response.ok) {
         alert('パスワードリセットメールを送信しました。')
       } else {
@@ -111,15 +110,8 @@ function Auth() {
               <label>
                 氏名
                 <br />
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-                {errors.username && (
-                  <span className="error">{errors.username}</span>
-                )}
+                <input type="text" name="username" value={formData.username} onChange={handleInputChange} />
+                {errors.username && <span className="error">{errors.username}</span>}
               </label>
             </div>
           )}
@@ -127,12 +119,7 @@ function Auth() {
             <label>
               メールアドレス
               <br />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
               {errors.email && <span className="error">{errors.email}</span>}
             </label>
           </div>
@@ -140,40 +127,25 @@ function Auth() {
             <label>
               パスワード
               <br />
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              {errors.password && (
-                <span className="error">{errors.password}</span>
-              )}
+              <input type="password" name="password" value={formData.password} onChange={handleInputChange} />
+              {errors.password && <span className="error">{errors.password}</span>}
             </label>
           </div>
           <div className="form-row">
-            <button onClick={handleSubmit}>
-              {isLoginMode ? 'ログイン' : '登録'}
-            </button>
+            <button onClick={handleSubmit}>{isLoginMode ? 'ログイン' : '登録'}</button>
           </div>
           <div className="form-row">
             {isLoginMode ? (
               <>
                 アカウントをお持ちでない場合は
-                <span
-                  className="form-link"
-                  onClick={() => setIsLoginMode(false)}
-                >
+                <span className="form-link" onClick={() => setIsLoginMode(false)}>
                   登録
                 </span>
               </>
             ) : (
               <>
                 既にアカウントをお持ちの場合は
-                <span
-                  className="form-link"
-                  onClick={() => setIsLoginMode(true)}
-                >
+                <span className="form-link" onClick={() => setIsLoginMode(true)}>
                   ログイン
                 </span>
               </>

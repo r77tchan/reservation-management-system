@@ -1,3 +1,6 @@
+// 予約の編集、作成画面
+// View.js内のCalendar.js、ReservationList.jsから呼び出し
+
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -6,6 +9,7 @@ import '../my.css'
 
 function Create() {
   const navigate = useNavigate()
+  // Calendar.js、ReservationList.jsから受け取る予約データ(存在する→編集モードor日付指定作成モード、存在しない→作成モード)
   const { state: initialData } = useLocation()
 
   const [formData, setFormData] = useState({
@@ -56,8 +60,8 @@ function Create() {
       const token = localStorage.getItem('token') // トークンを取得
 
       const url = isEditMode
-        ? `http://localhost:3001/reservations/${initialData.id}`
-        : `http://localhost:3001/reservations/create`
+        ? `${process.env.REACT_APP_API_BASE_URL}/reservations/${initialData.id}`
+        : `${process.env.REACT_APP_API_BASE_URL}/reservations/create`
       const method = isEditMode ? 'PUT' : 'POST'
 
       const response = await fetch(url, {
@@ -80,13 +84,13 @@ function Create() {
     }
   }
 
-  // 削除送信、View.jsのとは同名の別関数
+  // 削除送信。View.jsのとは同名の別関数
   const handleDelete = async (e) => {
     e.preventDefault()
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/reservations/${formData.id}/delete`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/reservations/${formData.id}/delete`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -109,7 +113,7 @@ function Create() {
     try {
       const token = localStorage.getItem('token')
 
-      const response = await fetch('http://localhost:3001/notifications/send', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/notifications/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

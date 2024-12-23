@@ -23,7 +23,7 @@ const Reservation = {
     })
   },
 
-  // 予約編集 (2024-01-01) (14:00)
+  // 予約編集 (2024-01-01) (14:00)（の形で）
   updateReservation: (data) => {
     return new Promise((resolve, reject) => {
       const query = `

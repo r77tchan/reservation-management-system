@@ -1,3 +1,5 @@
+// 1分ごとに実行されるスクリプト
+
 const cron = require('node-cron')
 const Notification = require('../models/Notification')
 const { getSocketInstance, getSocketIdByUserId } = require('../utils/socket')

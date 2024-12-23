@@ -1,3 +1,5 @@
+// トークンの検証を行い、トークンに含まれるユーザーデータをreq.userに格納する
+
 const { verifyToken } = require('../utils/jwtHelper')
 
 const authenticateToken = (req, res, next) => {
