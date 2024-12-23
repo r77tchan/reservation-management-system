@@ -7,6 +7,7 @@
 const app = require('../app')
 const debug = require('debug')('backend:server')
 const http = require('http')
+const { initializeSocket } = require('../utils/socket') // socket.js をインポート
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +21,9 @@ app.set('port', port)
  */
 
 const server = http.createServer(app)
+
+// WebSocket 初期化
+initializeSocket(server)
 
 /**
  * Listen on provided port, on all network interfaces.

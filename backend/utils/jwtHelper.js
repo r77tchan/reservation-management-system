@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const SECRET_KEY = process.env.SECRET_KEY
 
 // JWTトークンを生成する関数
-const generateToken = (payload, expiresIn = '1h') => {
+const generateToken = (payload, expiresIn = '7d') => {
   return jwt.sign(payload, SECRET_KEY, { expiresIn })
 }
 

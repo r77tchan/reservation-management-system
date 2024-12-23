@@ -118,6 +118,10 @@ form button {
   background-color: #EC7063;
 }
 
+.notice-button {
+  background-color: #047CFE;
+}
+
 button {
   border-radius: 8px; /* 角を丸くする */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ドロップシャドウ */

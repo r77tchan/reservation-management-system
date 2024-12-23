@@ -7,25 +7,28 @@ import Top from './pages/Top'
 import View from './pages/View'
 import Create from './pages/Create'
 import Auth from './pages/Auth'
+import { NotificationProvider } from './components/NotificationContext'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* プライベートルート */}
-        <Route element={<PrivateRoute />}>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Top />} />
-            <Route path="/view" element={<View />} />
-            <Route path="/create" element={<Create />} />
+    <NotificationProvider>
+      <Router>
+        <Routes>
+          {/* プライベートルート */}
+          <Route element={<PrivateRoute />}>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Top />} />
+              <Route path="/view" element={<View />} />
+              <Route path="/create" element={<Create />} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* パブリックルート */}
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/default" element={<Default />} />
-      </Routes>
-    </Router>
+          {/* パブリックルート */}
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/default" element={<Default />} />
+        </Routes>
+      </Router>
+    </NotificationProvider>
   )
 }
 
